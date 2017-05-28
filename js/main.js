@@ -5,7 +5,7 @@ $(document).ready(function(){
 
 
 	$("#testimonial-slider").owlCarousel({
-	    paginationSpeed : 500,      
+	    paginationSpeed : 500,
 	    singleItem:true,
 	    autoPlay: 3000,
 	});
@@ -45,9 +45,7 @@ $(document).ready(function(){
         time: 1000
     });
 
-
+	$('.faq__item .question').on('click', function(e) {
+		$(this).siblings().toggle('open');
+	});
 });
-
-
-
-
