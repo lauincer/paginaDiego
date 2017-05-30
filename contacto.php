@@ -65,7 +65,7 @@
                     <li><a href="ventajas.html">Ventajas</a></li>
                     <li><a href="servicios.html">Servicios</a></li>
                     <li><a href="cotizar.html">Cotizar</a></li>
-                    <li><a href="contacto.html">Contacto</a></li>
+                    <li><a href="contacto.php">Contacto</a></li>
                   </li>
                 </ul>
                 </div><!-- /.navbar-collapse -->
@@ -159,7 +159,56 @@
 
               <div class="col-md-6 col-sm-12">
                 <div class="block">
-                  <form mname="contactform" method="post" action="send_form_email.php">
+                  <?php
+                    $errorMessage = '';
+
+                    if ((isset($_POST['email']) && strlen($_POST['email']) == 0) ||
+                        (isset($_POST['name']) && strlen($_POST['name']) == 0) ||
+                        (isset($_POST['comment']) && strlen($_POST['comment']) == 0))  {
+                        $errorMessage = 'Por favor ingrese toda la información solicitada.';
+                    }
+
+                  //if variables are filled out, send email
+                    if (isset($_POST['email']) && strlen($_POST['email']) > 0 &&
+                        isset($_POST['name']) && strlen($_POST['name']) > 0 &&
+                        isset($_POST['comment']) && strlen($_POST['comment']) > 0)  {
+
+                      //Email information
+                      $admin_email = "lauincer@gmail.com";
+                      $email = $_REQUEST['email'];
+                      $name = $_REQUEST['name'];
+                      $phone = $_REQUEST['phone'];
+                      $comment = $_REQUEST['comment'];
+                      $subject = 'Mensaje de ' . $name . ' - PROSolar Contacto';
+                      $body = '
+                      <html>
+                        <head>
+                          <title>Mensaje de ' . $name . ' - PROSolar Contacto</title>
+                        </head>
+                        <body>
+                          <p>Nombre: ' . $name . '</p>
+                          <p>Correo electrónico: ' . $email . '</p>
+                          <p>Número de teléfono: ' . $phone . '</p>
+                          <p>Comentario: ' . $comment . '</p>
+                        </body>
+                      </html>
+                      ';
+
+                      $headers[] = 'MIME-Version: 1.0';
+                      $headers[] = 'Content-type: text/html; charset=iso-8859-1';
+                      $headers[] = 'To: ' . $admin_email;
+                      $headers[] = 'From: ' . $email;
+
+                      //send email
+                      mail($admin_email, $subject, $body, implode("\r\n", $headers));
+
+                      //Email response
+                      echo "Gracias por contactarnos. Nos pondremos en contacto con usted.";
+                    }
+                    //if "email" variable is not filled out, display the form
+                    else  {
+                  ?>
+                  <form name="contactform" method="post" action="">
                     <div class="form-group">
                       <input name="name" type="text" class="form-control" placeholder="Nombre">
                     </div>
@@ -170,10 +219,15 @@
                       <input name="phone" type="text" class="form-control" placeholder="Número telefónico">
                     </div>
                     <div class="form-group-2">
-                      <textarea cname="comment" lass="form-control" rows="3" placeholder="Su mensaje"></textarea>
+                      <textarea name="comment" class="form-control" rows="3" placeholder="Su mensaje"></textarea>
                     </div>
                     <button class="btn btn-default" type="submit">Enviar mensaje</button>
                   </form>
+                  <br/>
+                  <?php
+                      echo $errorMessage;
+                    }
+                  ?>
                 </div>
               <!-- </div> -->
 
@@ -209,7 +263,7 @@
                 <li><a href="sobrenosotros.html">Sobre Nosotros</a></li>
                 <li><a href="FAQ.html">Preguntas Frecuentes</a></li>
                 <li><a href="servicios.html">Servicios</a></li>
-                <li><a href="contacto.html">Contacto</a></li>
+                <li><a href="contacto.php">Contacto</a></li>
               </ul>
             </div>
             <p>©2017 <strong> PROSOLAR </strong> Energías Renovables</p>
